@@ -1,41 +1,41 @@
-import * as types from '../constants/ActionTypes';
+var types = require('../constants/ActionTypes');
 
-export function addTodo(text) {
+module.exports.addTodo = function addTodo(text) {
   return {
     type: types.ADD_TODO,
-    text
+    text: text
   };
 }
 
-export function deleteTodo(id) {
+module.exports.deleteTodo = function deleteTodo(id) {
   return {
     type: types.DELETE_TODO,
-    id
+    id: id
   };
 }
 
-export function editTodo(id, text) {
+module.exports.editTodo = function editTodo(id, text) {
   return {
     type: types.EDIT_TODO,
-    id,
-    text
+    id: id,
+    text: text
   };
 }
 
-export function markTodo(id) {
+module.exports.markTodo = function markTodo(id) {
   return {
     type: types.MARK_TODO,
-    id
+    id: id
   };
 }
 
-export function markAll() {
+module.exports.markAll = function markAll() {
   return {
     type: types.MARK_ALL
   };
 }
 
-export function clearMarked() {
+module.exports.clearMarked = function clearMarked() {
   return {
     type: types.CLEAR_MARKED
   };

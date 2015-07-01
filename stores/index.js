@@ -1,1 +1,1 @@
-export { default as todos } from './todos';
+module.exports.todos = require('./todos');

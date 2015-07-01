@@ -1,40 +1,46 @@
-import React, { PropTypes } from 'react';
-import classnames from 'classnames';
-import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
+var React = require('react');
+var PropTypes = React.PropTypes;
+var classnames = require('classnames');
+var filters = require('../constants/TodoFilters');
 
-const FILTER_TITLES = {
-  [SHOW_ALL]: 'All',
-  [SHOW_UNMARKED]: 'Active',
-  [SHOW_MARKED]: 'Completed'
-};
+var SHOW_ALL = filters.SHOW_ALL;
+var SHOW_UNMARKED = filters.SHOW_UNMARKED;
+var SHOW_MARKED = filters.SHOW_MARKED;
 
-export default class Footer {
-  static propTypes = {
+var FILTER_TITLES = {};
+FILTER_TITLES[SHOW_ALL] = 'All';
+FILTER_TITLES[SHOW_UNMARKED] = 'Active';
+FILTER_TITLES[SHOW_MARKED] = 'Completed';
+
+var Footer = React.createClass({
+  propTypes: {
     markedCount: PropTypes.number.isRequired,
     unmarkedCount: PropTypes.number.isRequired,
     filter: PropTypes.string.isRequired,
     onClearMarked: PropTypes.func.isRequired,
     onShow: PropTypes.func.isRequired
-  }
+  },
 
-  render() {
+  render: function() {
     return (
       <footer className='footer'>
         {this.renderTodoCount()}
         <ul className='filters'>
-          {[SHOW_ALL, SHOW_UNMARKED, SHOW_MARKED].map(filter =>
-            <li key={filter}>
-              {this.renderFilterLink(filter)}
-            </li>
-          )}
+          {[SHOW_ALL, SHOW_UNMARKED, SHOW_MARKED].map(function(filter) {
+            return (
+              <li key={filter}>
+                {this.renderFilterLink(filter)}
+              </li>
+            );
+          }, this)}
         </ul>
         {this.renderClearButton()}
       </footer>
     );
-  }
+  },
 
   renderTodoCount() {
-    const { unmarkedCount } = this.props;
+    var unmarkedCount = this.props.unmarkedCount;
     const itemWord = unmarkedCount === 1 ? 'item' : 'items';
 
     return (
@@ -42,23 +48,25 @@ export default class Footer {
         <strong>{unmarkedCount || 'No'}</strong> {itemWord} left
       </span>
     );
-  }
+  },
 
   renderFilterLink(filter) {
-    const title = FILTER_TITLES[filter];
-    const { filter: selectedFilter, onShow } = this.props;
+    var title = FILTER_TITLES[filter];
+    var selectedFilter = this.props.selectedFilter;
+    var onShow = this.props.onShow;
 
     return (
       <a className={classnames({ selected: filter === selectedFilter })}
          style={{ cursor: 'hand' }}
-         onClick={() => onShow(filter)}>
+         onClick={function() { onShow(filter) }}>
         {title}
       </a>
     );
-  }
+  },
 
   renderClearButton() {
-    const { markedCount, onClearMarked } = this.props;
+    var markedCount = this.props.markedCount;
+    var onClearMarked = this.props.onClearMarked;
     if (markedCount > 0) {
       return (
         <button className='clear-completed'
@@ -68,4 +76,6 @@ export default class Footer {
       );
     }
   }
-}
+});
+
+module.exports = Footer

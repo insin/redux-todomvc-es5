@@ -29,6 +29,7 @@
   "homepage": "https://github.com/gaearon/redux#readme",
   "dependencies": {
     "classnames": "^2.1.2",
+    "object-assign": "^3.0.0",
     "react": "^0.13.3",
     "redux": "^0.12.0"
   },

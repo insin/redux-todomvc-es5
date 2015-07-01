@@ -1,48 +1,49 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL, CLEAR_MARKED } from '../constants/ActionTypes';
+var assign = require('object-assign');
+var types = require('../constants/ActionTypes');
 
-const initialState = [{
+var initialState = [{
   text: 'Use Redux',
   marked: false,
   id: 0
 }];
 
-export default function todos(state = initialState, action) {
+module.exports = function todos(state, action) {
+  state = state || initialState
   switch (action.type) {
-  case ADD_TODO:
+  case types.ADD_TODO:
     return [{
       id: (state.length === 0) ? 0 : state[0].id + 1,
       marked: false,
       text: action.text
-    }, ...state];
+    }].concat(state);
 
-  case DELETE_TODO:
-    return state.filter(todo =>
-      todo.id !== action.id
-    );
+  case types.DELETE_TODO:
+    return state.filter(function(todo) {
+      return todo.id !== action.id
+    });
 
-  case EDIT_TODO:
-    return state.map(todo =>
-      todo.id === action.id ?
-        { ...todo, text: action.text } :
+  case types.EDIT_TODO:
+    return state.map(function(todo) {
+      return todo.id === action.id ?
+        assign({}, todo, { text: action.text }) :
         todo
-    );
+    });
 
-  case MARK_TODO:
-    return state.map(todo =>
-      todo.id === action.id ?
-        { ...todo, marked: !todo.marked } :
+  case types.MARK_TODO:
+    return state.map(function(todo) {
+      return todo.id === action.id ?
+        assign({}, todo, { marked: !todo.marked }) :
         todo
-    );
+    });
 
-  case MARK_ALL:
-    const areAllMarked = state.every(todo => todo.marked);
-    return state.map(todo => ({
-      ...todo,
-      marked: !areAllMarked
-    }));
+  case types.MARK_ALL:
+    var areAllMarked = state.every(function(todo) { return todo.marked });
+    return state.map(function(todo) {
+      return assign({}, todo, { marked: !areAllMarked })
+    });
 
-  case CLEAR_MARKED:
-    return state.filter(todo => todo.marked === false);
+  case types.CLEAR_MARKED:
+    return state.filter(function(todo) { return todo.marked === false });
 
   default:
     return state;

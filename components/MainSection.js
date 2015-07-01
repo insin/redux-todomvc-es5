@@ -1,43 +1,50 @@
-import React, { Component, PropTypes } from 'react';
-import TodoItem from './TodoItem';
-import Footer from './Footer';
-import { SHOW_ALL, SHOW_MARKED, SHOW_UNMARKED } from '../constants/TodoFilters';
+var React = require('react');
+var PropTypes = React.PropTypes;
+var TodoItem = require('./TodoItem');
+var Footer = require('./Footer');
+var filters = require('../constants/TodoFilters');
 
-const TODO_FILTERS = {
-  [SHOW_ALL]: () => true,
-  [SHOW_UNMARKED]: todo => !todo.marked,
-  [SHOW_MARKED]: todo => todo.marked
-};
+var SHOW_ALL = filters.SHOW_ALL;
+var SHOW_UNMARKED = filters.SHOW_UNMARKED;
+var SHOW_MARKED = filters.SHOW_MARKED;
 
-export default class MainSection extends Component {
-  static propTypes = {
+var TODO_FILTERS = {};
+TODO_FILTERS[SHOW_ALL] = function() { return true };
+TODO_FILTERS[SHOW_UNMARKED] = function(todo) { return !todo.marked };
+TODO_FILTERS[SHOW_MARKED] = function(todo) { return todo.marked };
+
+var MainSection = React.createClass({
+  propTypes: {
     todos: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
-  };
+  },
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = { filter: SHOW_ALL };
-  }
+  getInitialState: function() {
+    return {
+      filter: SHOW_ALL
+    };
+  },
 
-  handleClearMarked() {
-    const atLeastOneMarked = this.props.todos.some(todo => todo.marked);
+  handleClearMarked: function() {
+    const atLeastOneMarked = this.props.todos.some(function(todo) { return todo.marked });
     if (atLeastOneMarked) {
       this.props.actions.clearMarked();
     }
-  }
+  },
 
-  handleShow(filter) {
-    this.setState({ filter });
-  }
+  handleShow: function(filter) {
+    this.setState({ filter: filter });
+  },
 
-  render() {
-    const { todos, actions } = this.props;
-    const { filter } = this.state;
+  render: function() {
+    var todos = this.props.todos;
+    var actions = this.props.actions;
+    var filter = this.state.filter;
 
-    const filteredTodos = todos.filter(TODO_FILTERS[filter]);
-    const markedCount = todos.reduce((count, todo) =>
-      todo.marked ? count + 1 : count,
+    var filteredTodos = todos.filter(TODO_FILTERS[filter]);
+    var markedCount = todos.reduce(function(count, todo) {
+        return todo.marked ? count + 1 : count;
+      },
       0
     );
 
@@ -45,17 +52,18 @@ export default class MainSection extends Component {
       <section className='main'>
         {this.renderToggleAll(markedCount)}
         <ul className='todo-list'>
-          {filteredTodos.map(todo =>
-            <TodoItem key={todo.id} todo={todo} {...actions} />
-          )}
+          {filteredTodos.map(function(todo) {
+            return <TodoItem key={todo.id} todo={todo} {...actions} />
+          })}
         </ul>
         {this.renderFooter(markedCount)}
       </section>
     );
-  }
+  },
 
-  renderToggleAll(markedCount) {
-    const { todos, actions } = this.props;
+  renderToggleAll: function(markedCount) {
+    var todos = this.props.todos;
+    var actions = this.props.actions;
     if (todos.length > 0) {
       return (
         <input className='toggle-all'
@@ -64,21 +72,23 @@ export default class MainSection extends Component {
                onChange={actions.markAll} />
       );
     }
-  }
+  },
 
-  renderFooter(markedCount) {
-    const { todos } = this.props;
-    const { filter } = this.state;
-    const unmarkedCount = todos.length - markedCount;
+  renderFooter: function(markedCount) {
+    var todos = this.props.todos;
+    var filter = this.state.filter;
+    var unmarkedCount = todos.length - markedCount;
 
     if (todos.length) {
       return (
         <Footer markedCount={markedCount}
                 unmarkedCount={unmarkedCount}
                 filter={filter}
-                onClearMarked={::this.handleClearMarked}
-                onShow={::this.handleShow} />
+                onClearMarked={this.handleClearMarked}
+                onShow={this.handleShow} />
       );
     }
   }
-}
+});
+
+module.exports = MainSection;

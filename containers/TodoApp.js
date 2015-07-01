@@ -1,26 +1,28 @@
-import React from 'react';
-import { bindActionCreators } from 'redux';
-import { Connector } from 'redux/react';
-import Header from '../components/Header';
-import MainSection from '../components/MainSection';
-import * as TodoActions from '../actions/TodoActions';
+var React = require('react');
+var bindActionCreators = require('redux').bindActionCreators;
+var Connector = require('redux/react').Connector;
+var Header = require('../components/Header');
+var MainSection = require('../components/MainSection');
+var TodoActions = require('../actions/TodoActions');
 
-export default class TodoApp {
-  render() {
+var TodoApp = React.createClass({
+  render: function() {
     return (
-      <Connector select={state => ({ todos: state.todos })}>
+      <Connector select={function(state) { return {todos: state.todos} }}>
         {this.renderChild}
       </Connector>
     );
-  }
+  },
 
-  renderChild({ todos, dispatch }) {
-    const actions = bindActionCreators(TodoActions, dispatch);
+  renderChild: function(state) {
+    var actions = bindActionCreators(TodoActions, state.dispatch);
     return (
       <div>
         <Header addTodo={actions.addTodo} />
-        <MainSection todos={todos} actions={actions} />
+        <MainSection todos={state.todos} actions={actions} />
       </div>
     );
   }
-}
+});
+
+module.exports = TodoApp;

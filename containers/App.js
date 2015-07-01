@@ -1,17 +1,19 @@
-import React from 'react';
-import TodoApp from './TodoApp';
-import { createRedux } from 'redux';
-import { Provider } from 'redux/react';
-import * as stores from '../stores';
+var React = require('react');
+var TodoApp = require('./TodoApp');
+var createRedux = require('redux').createRedux;
+var Provider = require('redux/react').Provider;
+var stores = require('../stores');
 
-const redux = createRedux(stores);
+var redux = createRedux(stores);
 
-export default class App {
-  render() {
+var App = React.createClass({
+  render: function() {
     return (
       <Provider redux={redux}>
-        {() => <TodoApp />}
+        {function() { return <TodoApp />; }}
       </Provider>
     );
   }
-}
+});
+
+module.exports = App;
