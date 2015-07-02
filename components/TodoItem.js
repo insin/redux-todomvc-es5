@@ -41,7 +41,7 @@ var TodoItem = React.createClass({
       element = (
         <TodoTextInput text={todo.text}
                        editing={this.state.editing}
-                       onSave={function(text) { this.handleSave(todo.id, text) }.bind(this)} />
+                       onSave={this.handleSave.bind(this, todo.id)} />
       );
     } else {
       element = (
@@ -49,12 +49,12 @@ var TodoItem = React.createClass({
           <input className='toggle'
                  type='checkbox'
                  checked={todo.marked}
-                 onChange={function() { markTodo(todo.id) }} />
+                 onChange={markTodo.bind(null, todo.id)} />
           <label onDoubleClick={this.handleDoubleClick}>
             {todo.text}
           </label>
           <button className='destroy'
-                  onClick={function() { deleteTodo(todo.id) }} />
+                  onClick={deleteTodo.bind(null, todo.id)} />
         </div>
       );
     }
