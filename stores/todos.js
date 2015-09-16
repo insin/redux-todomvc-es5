@@ -1,5 +1,6 @@
 var assign = require('object-assign');
 var types = require('../constants/ActionTypes');
+var createStore = require('redux').createStore;
 
 var initialState = [{
   text: 'Use Redux',
@@ -7,7 +8,7 @@ var initialState = [{
   id: 0
 }];
 
-module.exports = function todos(state, action) {
+function todos(state, action) {
   state = state || initialState
   switch (action.type) {
   case types.ADD_TODO:
@@ -49,3 +50,5 @@ module.exports = function todos(state, action) {
     return state;
   }
 }
+
+module.exports = createStore(todos, initialState);
