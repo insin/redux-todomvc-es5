@@ -1,15 +1,12 @@
 var React = require('react');
 var TodoApp = require('./TodoApp');
-var createRedux = require('redux').createRedux;
-var Provider = require('redux/react').Provider;
-var stores = require('../stores');
-
-var redux = createRedux(stores);
+var Provider=require("react-redux").Provider;
+var store = require('../stores/todos');
 
 var App = React.createClass({
   render: function() {
     return (
-      <Provider redux={redux}>
+      <Provider store={store}>
         {function() { return <TodoApp />; }}
       </Provider>
     );
