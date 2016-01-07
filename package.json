@@ -31,7 +31,8 @@
     "classnames": "^2.1.2",
     "object-assign": "^3.0.0",
     "react": "^0.13.3",
-    "redux": "^0.12.0"
+    "react-redux": "^2.1.2",
+    "redux": "^3.0.0"
   },
   "devDependencies": {
     "babel-core": "^5.5.8",
